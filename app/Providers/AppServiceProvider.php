@@ -24,6 +24,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', 'App\Http\ViewComposers\UserComposer');
     }
 }
