@@ -176,9 +176,6 @@ return [
         App\Providers\DomainServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\RepositoryServiceProvider::class,
-        App\Providers\ServiceServiceProvider::class,
-        App\Providers\ViewCreatorServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
 
     ],
