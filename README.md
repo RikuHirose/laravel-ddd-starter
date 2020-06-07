@@ -28,6 +28,8 @@ npm run dev
 npm run watch
 ```
 
+## ddd
+
 ```
 - packages
   - Domain
@@ -47,4 +49,9 @@ npm run watch
 
   - UseCase
    => usecaseのinterfaceやinput bounday, output boundayを実装
+```
+
+Create usecase files including usecase, usecase`s interface, inputdata, outputdata
+```
+php artisan make:usecase {domain : name of domain name} {usecaseName : The name of usecase}
 ```
