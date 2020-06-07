@@ -3,7 +3,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class DomainServiceProvider extends ServiceProvider
+class UseCaseServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -21,5 +21,6 @@ class DomainServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // write
     }
 }

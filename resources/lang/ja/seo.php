@@ -2,18 +2,18 @@
 
 return [
     'index' => [
-        'title'       => 'ブロガーランキング | あなたのブロガーとしてのがんばりが認められるサービスです',
-        'description' => 'ブロガーランキングはあなたのブロガーとしてのがんばりが認められるサービスです',
-        'keywords'    => 'ランキング,ブロガー,駆け出しブロガー',
+        'title'       => '',
+        'description' => '',
+        'keywords'    => '',
     ],
     'users' => [
       'index' => [
-          'title'       => '検索結果 - ブロガーランキング',
-          'description' => 'ブロガーランキングの検索結果',
+          'title'       => '',
+          'description' => '',
       ],
       'show' => [
-          'title'       => ' ブロガーランキング',
-          'description' => ' ブロガーランキングの詳細ページ',
+          'title'       => '',
+          'description' => '',
       ],
     ],
 ];
