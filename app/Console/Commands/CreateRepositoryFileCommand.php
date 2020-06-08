@@ -4,23 +4,24 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-/**
- * https://qiita.com/hironeko/items/1a2df88f7857d02a38a1
- * CreateRepositoryFileCommand class
- */
 class CreateRepositoryFileCommand extends Command
 {
     /**
-     * @const string repository dir path
+     * @const string dir Infrastructure path
      */
-    const REPOSITORIES_PATH = 'app/Repositories/';
+    const INFRASTRUCTURE_PATH = 'packages/Infrastructure/';
+
+    /**
+     * @const string dir domain path
+     */
+    const DOMAIN_PATH = 'packages/Domain/Domain/';
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:repository {repositoryName : The name of repository}';
+    protected $signature = 'make:repository {repository : name of repository name}';
 
     /**
      * The console command description.
@@ -28,26 +29,11 @@ class CreateRepositoryFileCommand extends Command
      * @var string
      */
     protected $description = 'Create repository files';
-
-    /**
-     * @var string
-     */
-    private $fileName;
-
-    /**
-     * @var string
-     */
-    private $dirName;
-
-    /**
-     * @var string
-     */
+    private $repository;
+    private $domainDirectory;
+    private $InfraDirectory;
+    private $repositoryInterfaceFileName;
     private $repositoryFileName;
-
-    /**
-     * @var string
-     */
-    private $interfaceFileName;
 
     /**
      * Create a new command instance.
@@ -66,32 +52,42 @@ class CreateRepositoryFileCommand extends Command
      */
     public function handle()
     {
-        $this->fileName = $this->argument('repositoryName');
-        $this->dirName  = $this->fileName;
+        $this->repository      = $this->argument('repository');
+        $this->domainDirectory = self::DOMAIN_PATH.'/'.$this->repository.'/';
+        $this->InfraDirectory  = self::INFRASTRUCTURE_PATH . 'Repository' . '/';
 
-        if (is_null($this->fileName)) {
-            $this->error('Repository Name invalid');
-        }
-        // $this->dirName = $this->ask('new directory name. or use directory name');
-
-        if (is_null($this->dirName)) {
-            $this->error('Directory required!');
+        if (is_null($this->repository)) {
+            $this->error('Name invalid');
         }
 
-        if (!$this->isExistDirectory()) {
-            $this->createDirectory();
+        if (!$this->isExistDirectory($this->domainDirectory)) {
+            $this->createDirectory($this->domainDirectory);
         }
 
-        $this->repositoryFileName = self::REPOSITORIES_PATH . $this->dirName . '/' . $this->fileName . 'Repository.php';
-        $this->interfaceFileName = self::REPOSITORIES_PATH . $this->dirName . '/' . $this->fileName . 'RepositoryInterface.php';
+        if (!$this->isExistDirectory($this->InfraDirectory)) {
+            $this->createDirectory($this->InfraDirectory);
+        }
+
+        $this->repositoryInterfaceFileName = $this->domainDirectory.$this->repository.'RepositoryInterface.php';
+        $this->repositoryFileName = $this->InfraDirectory . $this->repository . 'Repository.php';
+
         if ($this->isExistFiles()) {
             $this->error('already exist');
             return;
         }
 
+        $this->createRepositoryInterface();
         $this->createRepositoryFile();
-        $this->createInterFaceFile();
+
         $this->info('create successfully');
+        $this->line('');
+        $this->comment('Add the following route to app/Providers/RepositoryServiceProvider.php:');
+        $this->line('');
+        $this->info("    \$this->app->bind(
+            \\packages\\Domain\\Domain\\$this->repository\\$this->repository". "RepositoryInterface::class,
+            \\packages\\Infrastructure\\Repository\\$this->repository". "Repository::class
+        );");
+        $this->line('');
     }
 
     /**
@@ -100,18 +96,25 @@ class CreateRepositoryFileCommand extends Command
      */
     private function createRepositoryFile(): void
     {
-        $content = "<?php\n\nnamespace App\\Repositories\\$this->dirName;\n\nUse App\\Models\\$this->dirName;\nuse App\Repositories\Base\BaseRepository;\n\nclass $this->fileName" . "Repository extends BaseRepository implements $this->fileName" . "RepositoryInterface\n{\n\t\tpublic function getBlankModel()\n\t\t{\n\t\t\treturn new $this->fileName();\n\t\t}\n}\n";
+        $domainPath = "packages\\Domain\\Domain\\$this->repository\\$this->repository";
+        $repositoryInterfacePath = "packages\\Domain\\Domain\\$this->repository\\$this->repository". 'RepositoryInterface';
+
+        $eloquent   = "\$eloquent".$this->repository;
+        $construct  = "\\App\\Models\\".$this->repository." ".$eloquent;
+        $construct2 = "\$this->eloquent".$this->repository." = ".$eloquent.";";
+
+
+        $content = "<?php\n\nnamespace packages\\Infrastructure\\Repository;\n\nUse $domainPath;\nuse $repositoryInterfacePath;\n\nclass $this->repository" . "Repository implements $this->repository" . "RepositoryInterface\n{\n\t\tprivate $eloquent;\n\n\t\tpublic function __construct($construct)\n\t\t{\n\t\t\t\t$construct2\n\t\t}\n}\n";
         file_put_contents($this->repositoryFileName, $content);
     }
 
     /**
-     * Interfaceのfileを作成する
      * @return void
      */
-    private function createInterFaceFile(): void
+    private function createRepositoryInterface(): void
     {
-        $content = "<?php\n\nnamespace App\\Repositories\\$this->dirName;\n\nuse App\Repositories\Base\BaseRepositoryInterface;\n\ninterface $this->fileName" . "RepositoryInterface extends BaseRepositoryInterface\n{\n\t\tpublic function getBlankModel();\n}\n";
-        file_put_contents($this->interfaceFileName, $content);
+        $content = "<?php\n\nnamespace packages\\Domain\\Domain\\$this->repository;\n\ninterface $this->repository" . "RepositoryInterface\n{\n\n}\n";
+        file_put_contents($this->repositoryInterfaceFileName, $content);
     }
 
     /**
@@ -120,24 +123,25 @@ class CreateRepositoryFileCommand extends Command
      */
     private function isExistFiles(): bool
     {
-        return file_exists($this->repositoryFileName) && file_exists($this->interfaceFileName);
+        return file_exists($this->repositoryFileName)
+            || file_exists($this->repositoryInterfaceFileName);
     }
 
     /**
      * directoryの存在確認
      * @return bool
      */
-    private function isExistDirectory(): bool
+    private function isExistDirectory($directory): bool
     {
-        return file_exists(self::REPOSITORIES_PATH . $this->dirName);
+        return file_exists($directory);
     }
 
     /**
      * 指定名でdirectoryの作成
      * @return void
      */
-    private function createDirectory(): void
+    private function createDirectory($directory): void
     {
-        mkdir(self::REPOSITORIES_PATH . $this->dirName, 0755, true);
+        mkdir($directory, 0755, true);
     }
 }

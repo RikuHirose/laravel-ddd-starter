@@ -29,6 +29,7 @@ npm run watch
 ```
 
 ## ddd
+https://little-hands.hatenablog.com/entry/2018/12/10/ddd-architecture
 
 ```
 - packages
