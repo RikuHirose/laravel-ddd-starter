@@ -36,10 +36,10 @@ npm run watch
     - Application
      => usecaseの実装クラス
     - Domain
-     => domainやvalue object repositoryのinterfaceの実装
+     => domainやvalue object, domain service, repositoryのinterfaceの実装
 
   - Infrastructure
-  => repositoryの実装クラスや外部api、通知の実装
+  => repository, QueryServiceの実装クラスや外部api、通知の実装
 
   - InMemoryInfrastructure
   => Infrastructure層の実装をtest用にmock化したもの
@@ -48,7 +48,7 @@ npm run watch
    => usecaseの実装クラスをtest用にmock化したもの
 
   - UseCase
-   => usecaseのinterfaceやinput bounday, output boundayを実装
+   => usecaseのinterfaceやQueryServiceのinterface, input bounday, output boundayを実装
 ```
 
 Create usecase files including usecase, usecase`s interface, inputdata, outputdata
