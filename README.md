@@ -56,3 +56,9 @@ Create usecase files including usecase, usecase`s interface, inputdata, outputda
 ```
 php artisan make:usecase {domain : name of domain name} {usecaseName : The name of usecase}
 ```
+
+create repository file
+```
+php artisan make:repository {repository : name of repository name}
+```
+

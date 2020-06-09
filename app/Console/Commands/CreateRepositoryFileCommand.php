@@ -123,8 +123,8 @@ class CreateRepositoryFileCommand extends Command
      */
     private function isExistFiles(): bool
     {
-        return file_exists($this->repositoryFileName)
-            || file_exists($this->repositoryInterfaceFileName);
+        return file_exists($this->repositoryInterfaceFileName)
+            || file_exists($this->repositoryFileName);
     }
 
     /**
