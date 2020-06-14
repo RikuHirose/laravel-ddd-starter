@@ -74,5 +74,12 @@ php artisan make:usecase {domain : name of domain name} {usecaseName : The name 
 create repository file
 ```
 php artisan make:repository {repository : name of repository name}
+
+```
+
+create externalApi file
+
+```
+php artisan make:externalApi {externalApi : name of externalApi name}
 ```
 
