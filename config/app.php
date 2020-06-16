@@ -167,16 +167,19 @@ return [
          */
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\UseCaseServiceProvider::class,
+        App\Providers\ExternalApiServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
         App\Providers\HelperServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\UseCaseServiceProvider::class,
 
     ],
 
